@@ -9,6 +9,7 @@ export function NavBarLayout($content, logic) {
         <li><a href="/second-exercise"><box-icon type='solid' name='graduation'></box-icon></a></li>
         <li><a href="/third-exercise"><box-icon type='solid' name='data'></box-icon></a></li>
         <li><a href="/fourth-exercise"><box-icon name='store-alt' type='solid' ></box-icon></a></li>
+        <li><a href="/fifth-exercise"><box-icon name='code'></box-icon></a></li>
       </ul>
     </nav>
   `;

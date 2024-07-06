@@ -1,197 +1,237 @@
-import 'boxicons'; // Asegúrate de que 'boxicons' esté importado correctamente según tu configuración
-import styles from './task.css';
+import "boxicons"; // Asegúrate de que 'boxicons' esté importado correctamente según tu configuración
 
 export function TaskManager() {
-  const $content = /*html*/ ` 
-    <div>
-      <button id="add-btn"><box-icon name='book-add'></box-icon></button>
-      <div id="mymodal" class="${styles['modalcontainer']}">
-        <div class="${styles['modalcontent']}">
-          <h2>Add a new task</h2>
-          <form id="task-form">
-            <span class="${styles['close']}" id="close-btn">x</span>
-            <input type="text" id="task-title" placeholder="Title" required>
-            <input type="text" id="task-desc" placeholder="Description" required>
-            <button type="submit">Add Task</button>
-          </form>
+  const $content = /*html*/ `
+        <h1>Hello welcome to your task manager</h1>
+
+        <div class=".modalCrear">
+
         </div>
-      </div>
 
-      <div id="modaledit" class="${styles['modalcontainer']}">
-        <div class="${styles['modalcontent']}">
-          <h2>Edit task</h2>
-          <form id="edit-form">
-            <span class="${styles['close']}" id="edit-close-btn">x</span>
-            <input type="text" id="edit-title" placeholder="Title" required>
-            <input type="text" id="edit-desc" placeholder="Description" required>
-            <button type="submit">Update Task</button>
-          </form>
+        <button id="crear"><box-icon name='book-add' ></box-icon></button>
+
+
+        <div id='container' class="grid grid-cols-3">
+
         </div>
-      </div>
-
-      <div id="task-container"></div>
-    </div>
-  `;
-
-  document.getElementById('root').innerHTML = $content;
-
-  const $modal = document.getElementById('mymodal');
-  const $editModal = document.getElementById('modaledit');
-  const $button = document.getElementById('add-btn');
-  const $close = document.getElementById('close-btn');
-  const $editClose = document.getElementById('edit-close-btn');
-  const $taskForm = document.getElementById('task-form');
-  const $editForm = document.getElementById('edit-form');
-
-  let editTaskId = undefined;
-
-  $button.addEventListener('click', () => {
-    $modal.style.display = 'block';
-  });
-
-  $close.addEventListener('click', () => {
-    $modal.style.display = 'none';
-  });
-
-  $editClose.addEventListener('click', () => {
-    $editModal.style.display = 'none';
-  });
-
-  $taskForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = document.getElementById('task-title').value;
-    const description = document.getElementById('task-desc').value;
-    const status = 'Pending';
-
-    try {
-      const response = await fetch('http://localhost:3000/tasks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, description, status }),
-      });
-      if (response.status === 201) {
-        alert('Task created');
-        logic(); // Refrescar las tareas sin recargar la página
-        $modal.style.display = 'none'; // Cerrar el modal
-      }
-    } catch (error) {
-      console.error('Error adding new task:', error);
-    }
-  });
-
-  $editForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const title = document.getElementById('edit-title').value;
-    const description = document.getElementById('edit-desc').value;
-
-    try {
-      const response = await fetch(`http://localhost:3000/tasks/${editTaskId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, description }),
-      });
-      if (response.status === 200) {
-        alert('Task updated');
-        logic(); // Refrescar las tareas sin recargar la página
-        $editModal.style.display = 'none'; // Cerrar el modal
-      }
-    } catch (error) {
-      console.error('Error updating task:', error);
-    }
-  });
-
-  const editTask = async (taskId) => {
-    editTaskId = taskId;
-
-    try {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`);
-      const task = await response.json();
-
-      document.getElementById('edit-title').value = task.title;
-      document.getElementById('edit-desc').value = task.description;
-
-      $editModal.style.display = 'block';
-    } catch (error) {
-      console.error(`Error fetching task ${taskId}:`, error);
-    }
-  }
-
-  const updateStatus = async (taskId, newStatus) => {
-    try {
-      await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      logic(); // Llamar de nuevo a la función lógica para refrescar las tareas
-    } catch (error) {
-      console.error(`Error updating status for task ${taskId}:`, error);
-    }
-  };
-
-  const deleteTask = async (taskId) => {
-    const option = confirm('Are you sure you want to delete this task?');
-    if (option) {
-      try {
-        await fetch(`http://localhost:3000/tasks/${taskId}`, {
-          method: 'DELETE',
-        });
-        logic(); // Refrescar las tareas sin recargar la página
-      } catch (error) {
-        console.error(`Error deleting task ${taskId}:`, error);
-      }
-    }
-  };
+    `;
 
   const logic = async () => {
-    const $taskContainer = document.getElementById('task-container');
-    $taskContainer.innerHTML = ''; // Limpiar el contenedor antes de añadir las tareas
+    const $container = document.getElementById("container");
+    const $crearTask = document.getElementById("crear");
+    const url = "http://localhost:3000/tasks";
 
+    //Modal para crear una nueva tarea
+    $crearTask.onclick = function () {
+      let modal = document.querySelector(".modalCrear");
+
+      if (!modal) {
+        modal = document.createElement("DIV");
+        modal.classList.add("modalCrear");
+
+        modal.innerHTML = /*html*/ `
+                
+                <form>
+                    <label for="nombre">Name</label>
+                    <input type="text" id="nombre" class="mx-2 p-3 bg-black text-white rounded-full">
+
+                    <label for="description">Description</label>
+                    <input type="text" id="description" class="mx-2 p-3 bg-black text-white rounded-full">
+
+                    <select id="status">
+                        <option value="0" disabled>Select a state</option>
+                        <option value="iniciando">Starting</option>
+                        <option value="progreso">In progress</option>
+                    </select>
+
+                    <input type="submit" value="send" class="mx-2 p-3 bg-black text-white rounded-full">
+                    <button id="close" class="mx-2 p-3 bg-black text-white rounded-full">Close</button>
+                </form>
+            `;
+
+        document.body.appendChild(modal);
+
+        const $nombre = document.getElementById("nombre");
+        const $description = document.getElementById("description");
+        const $status = document.getElementById("status");
+        const $submit = document.getElementsByTagName("form")[0];
+
+        $submit.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          try {
+            const createTask = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: $nombre.value,
+                description: $description.value,
+                status: $status.value,
+              }),
+            });
+
+            if (!createTask.ok) {
+              throw new Error("No ha sido posible crear la tarea");
+            }
+
+            alert("Tarea creado exitosamente");
+            window.location.reload();
+          } catch (err) {
+            alert(err);
+          }
+        });
+
+        modal.style.display = "block";
+        const closeBtn = document.getElementById("close");
+
+        closeBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          document.body.removeChild(modal);
+        });
+      }
+    };
+
+    //imprimimos tareas que tengamos ya almacenadas en la base de datos
     try {
-      const fetchTasks = await fetch('http://localhost:3000/tasks');
-      const tasks = await fetchTasks.json();
+      const getTask = await fetch(url);
 
-      tasks.forEach(task => {
-        const taskElement = document.createElement('DIV');
+      if (!getTask) {
+        throw new Error("No es posible obtener la info");
+      }
 
-        taskElement.innerHTML = /*html*/ `
-          <h3>${task.title}</h3>
-          <p>${task.description}</p>
-          <p>Status: ${task.status}</p>
-          <div>
-            <button class="complete-btn" data-id="${task.id}"><box-icon type='solid' name='like'></box-icon></button>
-            <button class="progress-btn" data-id="${task.id}"><box-icon name='dislike' type='solid'></box-icon></button>
-            <button class="delete-btn" data-id="${task.id}"><box-icon name='trash' type='solid'></box-icon></button>
-            <button class="edit-btn" data-id="${task.id}"><box-icon type='solid' name='edit-alt'></box-icon></button>
-          </div>
-        `;
+      const taskToJson = await getTask.json();
 
-        const $completeBtn = taskElement.querySelector('.complete-btn');
-        $completeBtn.addEventListener('click', () => updateStatus(task.id, 'completed'));
+      taskToJson.forEach((task) => {
+        $container.innerHTML += /*html*/ `
+                    <div class="border border-sky-300 mx-3">
+                        <h1 class="text-xl">${task.name}</h1>
+                        <p>${task.description}</p>
+                        <p>${task.status}</p>
 
-        const $progressBtn = taskElement.querySelector('.progress-btn');
-        $progressBtn.addEventListener('click', () => updateStatus(task.id, 'in progress'));
+                        <button class="edit"><box-icon name='edit-alt' type='solid' ></box-icon></button>
+                        <button class="delete"><box-icon name='trash' type='solid' ></box-icon></button>
+                    </div>
+                `;
 
-        const $deleteBtn = taskElement.querySelector('.delete-btn');
-        $deleteBtn.addEventListener('click', () => deleteTask(task.id));
+        const edit = document.getElementsByClassName("edit");
+        const deleteTask = document.getElementsByClassName("delete");
 
-        const $editBtn = taskElement.querySelector('.edit-btn');
-        $editBtn.addEventListener('click', () => editTask(task.id));
+        for (let f of deleteTask) {
+          f.addEventListener("click", async () => {
+            const inputUSer = confirm("¿Seguro quieres eliminar esta tarea?");
 
-        $taskContainer.appendChild(taskElement);
+            if (inputUSer) {
+              try {
+                const _deleteTask = await fetch(
+                  ` http://localhost:3000/tasks/${task.id}`,
+                  {
+                    method: "DELETE",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+
+                if (!_deleteTask.ok) {
+                  throw new Error("No ha sido posible eliminar la tarea");
+                }
+
+                alert("Tarea eliminada exitosamente");
+                window.location.reload();
+              } catch (err) {
+                alert(err);
+              }
+            }
+          });
+        }
+
+        for (let f of edit) {
+          f.addEventListener("click", async () => {
+            let modal = document.querySelector(".modalCrear");
+
+            if (!modal) {
+              modal = document.createElement("DIV");
+              modal.classList.add("modalCrear");
+
+              modal.innerHTML = /*html*/ ` 
+                            <form>
+                                <label for="nombre" >Name</label>
+                                <input type="text" id="nombre" disabled value=${task.name}>
+            
+                                <label for="description">Description</label>
+                                <input type="text" id="description" disabled value=${task.description}>
+            
+                                <select id="status">
+                                    <option value="0" disabled>Select a state</option>
+                                    <option value="iniciando">Starting</option>
+                                    <option value="progreso">In progress</option>
+                                    <option value="finalizada">Finished</option>
+                                </select>
+            
+                                <input type="submit" value="send" class="mx-2 p-3 bg-black text-white rounded-full">
+                                <button id="close" class="mx-2 p-3 bg-black text-white rounded-full">close</button>
+                            </form>
+                        `;
+
+              document.body.appendChild(modal);
+
+              const $nombre = document.getElementById("nombre");
+              const $description = document.getElementById("description");
+              const $status = document.getElementById("status");
+              const $submit = document.getElementsByTagName("form")[0];
+
+              modal.style.display = "block";
+              const closeBtn = document.getElementById("close");
+
+              closeBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                document.body.removeChild(modal);
+              });
+
+              $submit.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const updateTask = {
+                  name: $nombre.value,
+                  description: $description.value,
+                  status: $status.value,
+                };
+
+                try {
+                  const update = await fetch(
+                    `http://localhost:3000/tasks/${task.id}`,
+                    {
+                      method: "PUT",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(updateTask),
+                    }
+                  );
+
+                  if (!update.ok) {
+                    throw new Error("error to update your task");
+                  }
+
+                  alert("update succesful");
+                  window.location.reload();
+                } catch (err) {
+                  alert(err);
+                }
+              });
+            }
+          });
+        }
       });
-
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
+    } catch (err) {
+      alert(err);
     }
   };
 
- logic()
+  return {
+    $content,
+    logic,
+  };
 }

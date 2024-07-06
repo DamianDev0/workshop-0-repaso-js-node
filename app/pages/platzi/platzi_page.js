@@ -1,10 +1,10 @@
 export function PlatziPage() {
     const $content = /*html*/`
-    <form action="" id="form">
-       <input type="search" id="filter" placeholder="Buscar por título">
-       <button type="submit">Buscar</button>
+    <form action="" id="form" class="flex justify-center gap-2 my-3 w-50 h-auto">
+       <input type="search" id="filter" placeholder="Buscar por título" class="bg-slate-400 text-white font-bold text-xl w-90 rounded-full p-2">
+       <button type="submit" class="bg-black rounded-full p-3 text-white font-bold">Search</button>
     </form>
-    <div id="container"></div>
+    <div id="container" class="grid grid-cols-4 gap-6 mt-12"></div>
     `;
     
     const logic = async () => {
@@ -29,11 +29,16 @@ export function PlatziPage() {
             $container.innerHTML = ''; // Clear previous products
             products.forEach((product) => {
                 const productHTML = /*html*/`
-                    <div>
-                        <h2>${product.title}</h2>
-                        <p>$ {product.description}</p>
-                        <h3>${product.price}</h3>
-                        <img src="${product.images[0]}" alt="${product.title}">
+                    <div class="bg-slate-950">
+                    <img src="${product.images[0]}" alt="${product.title}" class>
+                        <div class="my-6">
+                            <h2 class="text-3xl my-5 text-white">${product.title}</h2>
+                            <p class="mx-2 text-white">${product.description}</p>
+                        </div>
+                        <div>
+                        <h3 class="text-3xl text-white">${product.price}$</h3>
+                        </div>
+                      
                     </div>
                 `;
                 $container.innerHTML += productHTML;

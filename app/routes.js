@@ -1,7 +1,9 @@
 import { ApiJsonPlaceholder } from "./pages/api_page";
 import { GradesPage } from "./pages/grades";
+import { Methods } from "./pages/methost/methods";
 import { PlatziPage } from "./pages/platzi/platzi_page";
 import { TaskManager } from "./pages/tasks";
+
 
 
 
@@ -12,5 +14,6 @@ export const routes = {
         { path: '/second-exercise', page: GradesPage},
         { path: '/third-exercise', page: ApiJsonPlaceholder},
         { path: '/fourth-exercise', page: PlatziPage},
+        { path: '/fifth-exercise', page: Methods},
     ]
 };

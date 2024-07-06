@@ -14,8 +14,8 @@
     justify-content: space-evenly;  /* Centra horizontalmente */
     width: 30%;
     margin:auto;
-    background-color: rgba(243, 46, 62, 0.411);
-    backdrop-filter: blur(3px);
+    background-color: rgba(114, 191, 255, 0.411);
+
     border-radius: 40px;
   }
   
