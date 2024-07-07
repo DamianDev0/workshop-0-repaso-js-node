@@ -1,3 +1,46 @@
+```sh
+Estructura del Workshop
+├── app
+│ ├── components
+│ └── pages
+│ ├── api_page
+│ ├── grades
+│ ├── methost
+│ └── platzi
+├── node_modules
+├── server
+│ ├── tasks
+│ ├── app.js
+│ ├── index.js
+│ ├── Router.js
+│ └── routes.js
+├── .gitignore
+├── endpoints.http
+├── global.css
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
+└── webpack.config.js
+
+
+Para ver el funcionamineto del workshop, debes descargarlo de la sguiente manera:
+
+git clone https://github.com/agogo345/workshop-0-repaso-js-node.git
+
+Despues de instalarlo debe descargar los node modules de la siguiente maner:
+
+npm i
+
+una vez instalado todos los node modules debes hacer:
+
+npm run start ### para iniciar el programa
+npm run server ### para iniciar el backend
+
+```
+
 Punto 1: Ejercicio Guiado - Creando una Aplicación de Gestión de Tareas
 En este primer punto, crearás una aplicación de gestión de tareas que te permitirá añadir, editar, eliminar y marcar tareas como completadas. Durante el proceso, se evaluarán los siguientes temas:
 

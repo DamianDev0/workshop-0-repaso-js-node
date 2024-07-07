@@ -13,5 +13,12 @@
       "status": "iniciando"
     }
   ],
-  "grades": []
+  "grades": [
+    {
+      "id": "c4a6",
+      "name": "matematicas",
+      "description": "melo melo",
+      "status": "important"
+    }
+  ]
 }
